@@ -53,7 +53,7 @@ class DropBox_SYNC():
 
 
 
- 	
+ 	# gui init at beginning
 	def gui_init(self):
 		self.main_win = Tkinter.Tk()
 
@@ -131,6 +131,7 @@ class DropBox_SYNC():
 
 		self.main_win.mainloop()
 
+	# changes what the selected folders by user are
 	def set_select_text(self):
 
 		self.dropbox_select_text = Tkinter.StringVar()
@@ -158,6 +159,7 @@ class DropBox_SYNC():
 		self.select_text_files = {'dropbox': self.dropbox_file_text,
 								'local': self.local_file_text}
 
+	# changes GUI to backup single files instead of folder
 	def swap_gui(self, framelist, framelist2):
 
 		self.ide_mode = not self.ide_mode
@@ -177,7 +179,9 @@ class DropBox_SYNC():
 				self.hide_frame(frameoff)
 			self.pack_ide_sol(framelist2)
 
-
+	
+	
+	# GUI for single file backup
 	def local_solution_gui(self, framelist):
 
 		labelframe = framelist[0]
@@ -212,10 +216,12 @@ class DropBox_SYNC():
 		self.file_select_label.pack(side="left", fill="x")
 	
 
+	# used for changing from file to folder option
 	def hide_frame(self, frame):
 		frame.pack_forget()
 
 
+	# initial folder backup option
 	def ide_solution_gui(self, framelist):
 
 		frameselect = framelist[0]
@@ -267,6 +273,7 @@ class DropBox_SYNC():
 		return framelist
 
 
+	# user error checking
 	def allowed_by_windows_folders(self, string):
 		not_allowed_list = ['<', '>', ':', '"', '/', '\\', '|', '?', '*']
 
@@ -293,6 +300,7 @@ class DropBox_SYNC():
 		folder_name = folder_name.replace("/","\\") # needed since explorer doesn't open / pathnames
 		os.system('explorer {}'.format(folder_name))
 
+	# adding on to user error checking
 	def filename_must_contain(self, root, error_image, mainroot = None):
 
 		self.allow_error_window = False
@@ -379,6 +387,7 @@ class DropBox_SYNC():
 			self.filename_must_contain(root, error_image)
 
 
+	# helpful for swapping between file/folder layouts
 	def pack_ide_sol(self, framelist):
 
 		frameselect = framelist[0]
@@ -399,6 +408,7 @@ class DropBox_SYNC():
 
 
 
+	# allows user to select which folder to set as "project directory"
 	def browse_dir(self, folder_name):
 		name = folder_name
 
@@ -413,6 +423,7 @@ class DropBox_SYNC():
 		# self.select_text[name.lower()].set(newfile.split("/")[-1]) # sets string variable from stringvar dictionary as the folder name
 
 
+	# creates backup of the current folder/file in one directory above the current one
 	def create_backup(self, location, original, project):
 
 		# TODO: Create backup for what is being replaced (i.e. create backup for dropbox files if syncing to dropbox)
@@ -442,6 +453,8 @@ class DropBox_SYNC():
 		shutil.copytree(original, filepath)
 
 
+	### these commands below use the functions above to sync project, and then either sync to or from the dropbox, depending on the button selected
+	
 	def sync_project(self, local_directory):
 		try:
 			shutil.rmtree(os.path.join(self.folders['dropbox'], self.project_name))
